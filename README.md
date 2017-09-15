@@ -1,75 +1,134 @@
-## JS组件开发说明
+# rc-upload
+---
 
-> 离线应用与颗粒组件
+React Upload
 
-## 介绍
+[![NPM version][npm-image]][npm-url]
+[![build status][travis-image]][travis-url]
+[![Test coverage][coveralls-image]][coveralls-url]
+[![npm download][download-image]][download-url]
 
-### 什么是离线应用？
+[npm-image]: http://img.shields.io/npm/v/rc-upload.svg?style=flat-square
+[npm-url]: http://npmjs.org/package/rc-upload
+[download-image]: https://img.shields.io/npm/dm/rc-upload.svg?style=flat-square
+[download-url]: https://npmjs.org/package/rc-upload
+[travis-image]: https://img.shields.io/travis/react-component/upload.svg?style=flat-square
+[travis-url]: https://travis-ci.org/react-component/upload
+[coveralls-image]: https://img.shields.io/coveralls/react-component/upload.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/react-component/upload?branch=master
 
-- 将 H5 应用中的 HTML、JS、CSS、图片、字体、等静态资源缓存在手机上的 H5 应用，就称之为离线应用。
-- 离线应用不会缓存数据，如果开发人员要做数据的缓存，要自己实现（建议把数据存存储在 [Bridge.require("sdp.localstorage")](http://reference.sdp.nd/appfactory/userguide/light/js-sdk/dao.html) 里,因为 HTML 的 localstorage 有空间限制）
-
-### 离线应用的优点是什么？
-
-- 减少请求远程资源，加速页面加载。
-- 减少流量
-
-### 什么是颗粒组件？
-
-- 颗粒组件是离线应用的一种开发方式，他继承离线应用的所有特征和优点。
-- 颗粒组件是比业务组件粒度更小的一种 H5 组件，它由一个布局页（page）和多个颗粒（widget）组合成一个 HTML 页面，相比之前的业务组件有更好的灵活度。
-
-
-
-## 项目说明
-
-本项目包含了离线应用和颗粒组件两个模板，方法大家借鉴使用。
-
-### 目录说明
+## Development
 
 ```
-./
-├── cli/                       // 命令脚本
-├── config/                    // 离线应用配置参数
-├── doc/                       // 项目使用到技术文档
-├── mock/                      // 存放 mock 数据
-├── src/                       // 离线应用的项目代码
-├── test/                      // 测试用例
-├── develop/                   // 开发环境下的颗粒打包程序
-├── page-common/               // 颗粒组件的 `布局页`（page）
-├── widget-1/                  // 颗粒组件的 `颗粒`（widget）
-├── i18n.js                    // 开发环境下颗粒组件的 i18n 文件加载代码
-└── webpack.config.babel.js    // 离线应用的 webpack 配置文件
-```
-
-
-### 颗粒组件常用命令
-
-```bash
-# 开启颗粒服务器，地址为 ：http://localhost:3000/ 或 http://localhost:3100/
-npm run dev:widget
-
-```
-
-### 离线常用命令
-
-```bash
-# start a mocking server at localhost:3001
-npm run mock
-
-# serve with hot reload at localhost:3000
-npm run dev
-
-# eslint, stylelint, unit and e2e test
-npm test
-
-# compile files for production with minification
-npm run compile
-
-# test, clean, and compile
-npm run build
-
-# serve dist, like production
+npm install
 npm start
-
 ```
+
+## Example
+
+http://localhost:8020/examples/
+
+online example: http://react-component.github.io/upload/examples/simple.html
+
+
+## Feature
+
+* support ie8,ie8+,chrome,firefox,safari
+
+## install
+
+[![rc-upload](https://nodei.co/npm/rc-upload.png)](https://npmjs.org/package/rc-upload)
+
+## Usage
+
+```js
+var Upload = require('rc-upload');
+var React = require('react');
+React.render(<Upload />, container);
+```
+
+## API
+
+### props
+
+|name|type|default| description|
+|-----|---|--------|----|
+|name | string | file| file param post to server |
+|style | object | {}| root component inline style |
+|className | string | - | root component className |
+|disabled | boolean | false | whether disabled |
+|component | "div"|"span" | "span"| wrap component name |
+|supportServerRender | boolean | false| whether to support server render |
+|onReady | function | | only call when supportServerRender is true, upload is rendered completely |
+|action| string | | form action url |
+|data| object/function(file) | | other data object to post or a function which returns a data object |
+|headers| object | {} | http headers to post, available in modern browsers |
+|accept | string | | input accept attribute |
+|multiple | boolean | false | only support ie10+|
+|onStart | function| | start upload file |
+|onError| function| | error callback |
+|onSuccess | function | | success callback |
+|onProgress | function || progress callback, only for modern browsers|
+|beforeUpload| function |null| before upload check, return false or a rejected Promise will stop upload, only for modern browsers|
+|customRequest | function | null | provide an override for the default xhr behavior for additional customization|
+|withCredentials | boolean | false | ajax upload with cookie send |
+
+#### onError arguments
+
+1. `err`: request error message
+2. `response`: request response, not support on iframeUpload
+3. `file`: upload file
+
+### onSuccess arguments
+
+1. `result`: response body
+2. `file`: upload file
+3. `xhr`: xhr header, only for modern browsers which support AJAX upload. since
+   2.4.0
+
+
+### customRequest
+
+Allows for advanced customization by overriding default behavior in AjaxUplaoder. Provide your own XMLHttpRequest calls to interface with custom backend processes or interact with AWS S3 service through the aws-sdk-js package.
+
+customRequest callback is passed an object with:
+
+* `onProgress: (event: { percent: number }): void`
+* `onError: (event: Error, body?: Object): void`
+* `onSuccess: (body: Object): void`
+* `data: Object`
+* `filename: String`
+* `file: File`
+* `withCredentials: Boolean`
+* `action: String`
+* `headers: Object`
+
+
+### methods
+
+abort(file?: File) => void: abort the uploading file
+
+
+### IE8/9 Note
+
+#### Download Popup Problem
+
+In iframe uploader way, the content-type of response should be `text/plain` or `text/html`.[referense](https://github.com/blueimp/jQuery-File-Upload/wiki/Setup#content-type-negotiation)
+
+What's more, in iframe mode, the response's status should always be `200 OK`, otherwise you might get an `Access is denied` error in IE 8/9.
+
+#### Domain Problem
+
+If the Page set document.domain, then server should output document.domain according to _documentDomain parameter.
+
+```js
+var ret = '';
+if (postData._documentDomain) {
+  ret += '<script>document.domain="'+postData._documentDomain+'";</script>';
+}
+this.body = ret + '{"url":"xx.jpq"}';
+```
+
+## License
+
+rc-upload is released under the MIT license.

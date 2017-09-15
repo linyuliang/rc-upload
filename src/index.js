@@ -1,5 +1,4 @@
-import 'application/bootstrap'
+// export this package's api
+import Upload from './Upload';
 
-if (module.hot) {
-  module.hot.accept()
-}
+export default Upload;

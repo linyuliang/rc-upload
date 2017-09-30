@@ -1,1 +1,58 @@
-placeholder
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>rc-upload-ie</title>
+    <link href="/node_modules\normalize.css/normalize.css" type="text/css" rel="stylesheet"/>
+    <script src="/node_modules\es5-shim/es5-shim.js"></script>
+    <script src="/node_modules\es5-shim/es5-sham.js"></script>
+    <script src="/node_modules\console-polyfill/index.js"></script>
+    <script src="/node_modules\rc-tools\public/modernizr.js"></script>
+    <script src="/node_modules\rc-tools\public/qrcode.js"></script>
+    <script src="/node_modules\fastclick/lib/fastclick.js"></script>
+    <link rel="stylesheet" type="text/css" href="/node_modules\highlight.js/styles/github.css">
+    
+    <script>
+    if(!window.Promise) {
+      document.writeln('<script src="/node_modules\es6-promise/dist/es6-promise.js"'+'>'+'<'+'/'+'script>');
+    }
+    </script>
+    <script src="/swfupload/swfobject.js"></script>
+    <script src="/swfupload/swfupload.js"></script>
+    <style>
+        .highlight {
+            background-color: transparent;
+            padding-top: 1px;
+            position: relative;
+        }
+
+        .highlight pre {
+            font-family: Consolas, "Liberation Mono", Courier, monospace;
+            margin: 6px 0;
+            border: 1px solid #eee;
+            padding: 6px 10px;
+            overflow: auto;
+            border-radius: 2px;
+            background-color: #f8f8f9;
+            line-height: 19px;
+            font-size: 13px;
+            white-space: pre;
+        }
+
+        .highlight pre code {
+            color: #5D6A6A;
+            background-color: transparent;
+            margin: auto;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+  <h1>flash上传</h1>
+  <div id="__react-content"></div>
+<script src="./ie.js"></script>
+</body>
+</html>

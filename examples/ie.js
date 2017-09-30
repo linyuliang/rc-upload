@@ -33,6 +33,13 @@ class Test extends React.Component {
     const { fileList, action } = this.state;
     const props = {
       action: action,
+      flash: {
+        fileSize:0,//[0,"1 MB","5 MB","10 MB"]
+        maxFileNum:5,
+        fileTypes:"all",//"img":"图片文件","excel":"Excel文件","all":"所有类型文件"
+        flash_url: "http://localhost:8020/swfupload/swfupload.swf",
+        flash9_url: "http://localhost:8020/swfupload/swfupload_fp9.swf"
+      },
       fileList: fileList,
       onStart: this.onStart,
       onError: this.onError,
@@ -44,7 +51,7 @@ class Test extends React.Component {
       <div>
         <a onClick={()=>{
           this.setState({
-            action: "http://betacs.101.com/v0.1/upload?scope=1&session=fdc5f370-4d0e-4ce3-a7f2-e9418a94f7bc&name=0.5166533120757633&path=/dev_content_diyform"
+            action: "http://betacs.101.com/v0.1/upload?scope=1&session=04140e3d-8e55-4def-9640-f27411e02379&name=0.5166533120757633&path=/dev_content_diyform"
           })
         }}>修改action</a>
         <Upload {...props}>

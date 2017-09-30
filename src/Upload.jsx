@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AjaxUpload from './AjaxUploader';
 import IframeUpload from './IframeUploader';
+import FlashUploader from './FlashUploader';
 
 function empty() {
 }
@@ -23,6 +24,7 @@ class Upload extends Component {
       PropTypes.func,
     ]),
     headers: PropTypes.object,
+    flash: PropTypes.object,
     accept: PropTypes.string,
     multiple: PropTypes.bool,
     disabled: PropTypes.bool,
@@ -38,6 +40,7 @@ class Upload extends Component {
     prefixCls: 'rc-upload',
     data: {},
     headers: {},
+    flash: {},
     name: 'file',
     multipart: false,
     onReady: empty,
@@ -65,7 +68,7 @@ class Upload extends Component {
   }
 
   getComponent() {
-    return typeof File !== 'undefined' ? AjaxUpload : IframeUpload;
+    return typeof File !== 'undefined' ? AjaxUpload : (SWFUpload ? FlashUploader : IframeUpload);
   }
 
   abort(file) {

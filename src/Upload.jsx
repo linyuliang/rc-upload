@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AjaxUpload from './AjaxUploader';
 import IframeUpload from './IframeUploader';
-import FlashUploader from './FlashUploader';
+let FlashUploader = null
+if(window.SWFUpload){
+  FlashUploader = require('./FlashUploader');
+}
 
 function empty() {
 }
@@ -68,7 +71,7 @@ class Upload extends Component {
   }
 
   getComponent() {
-    return typeof File !== 'undefined' ? AjaxUpload : (SWFUpload ? FlashUploader : IframeUpload);
+    return typeof File !== 'undefined' ? AjaxUpload : (FlashUploader ? FlashUploader : IframeUpload);
   }
 
   abort(file) {

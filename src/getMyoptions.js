@@ -16,7 +16,13 @@ export default function getMyoptions(props, obj) {
         button_width: style.width,
         button_height: style.height,
         //上传文件类型
-        file_types:{"img":"*.jpg;*.jpeg;*.png;*.gif;","excel":"*.xls;*.xlsx","all":"*.jpg;*.jpeg;*.png;*.gif;*.doc;*.docx;*.xls;*.xlsx;*.ppt;*.pptx;*.rar;*.7z;*.zip;*.txt;*.chm;*.pdf;*.epub;*.image"}[props.flash.fileTypes||"all"],
+        file_types:(function(fileTypes){
+            return {
+                "img":"*.jpg;*.jpeg;*.png;*.gif;",
+                "excel":"*.xls;*.xlsx",
+                "all":"*.jpg;*.jpeg;*.png;*.gif;*.doc;*.docx;*.xls;*.xlsx;*.ppt;*.pptx;*.rar;*.7z;*.zip;*.txt;*.chm;*.pdf;*.epub;*.image"
+            }[fileTypes || "all"] || fileTypes;
+        })(props.flash.fileTypes),
         //上传文件类型说明
         file_types_description:{"img":"图片文件","excel":"Excel文件","all":"所有类型文件"}[props.flash.fileTypes||"all"],
         //额外参数

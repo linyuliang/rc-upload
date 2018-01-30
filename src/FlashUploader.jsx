@@ -61,7 +61,7 @@ class FlashUploader extends Component {
 
   initFlash(){
     this.endUpload();
-    this.Flash.destroy && this.Flash.destroy();
+    let lastFlash = this.Flash;
     this._dom.innerHTML=`<div id=${this.state.uid}></div>`;
     this.Flash = new SWFUpload(getMyoptions(this.props, {
       id: this.state.uid,
@@ -70,6 +70,9 @@ class FlashUploader extends Component {
       changeStart: this.startUpload,
       changeEnd: this.endUpload
     }));
+    setTimeout(function(){
+      lastFlash.destroy && lastFlash.destroy();
+    },0)
   }
 
   endUpload = () =>{

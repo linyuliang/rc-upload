@@ -2,7 +2,8 @@
 import getUid from './uid';
 export default function getMyoptions(props, obj) {
     let {id, style, file, changeStart, changeEnd} = obj;
-    let nowfile ={};
+    let nowfile = {};
+    let propsData = props.data || {};
     var Myoptions={
         debug: false,
         //上传文件大小
@@ -26,7 +27,7 @@ export default function getMyoptions(props, obj) {
         //上传文件类型说明
         file_types_description:{"img":"图片文件","excel":"Excel文件","all":"所有类型文件"}[props.flash.fileTypes||"all"],
         //额外参数
-        post_params: props.data || {},
+        post_params: typeof propsData !== 'function' ? propsData : {},
         file_post_name : props.name || "file",
         //上传服务端地址
         upload_url : props.action,
@@ -74,6 +75,11 @@ export default function getMyoptions(props, obj) {
         nowfile.uid = getUid();
         file.uid = nowfile.uid;
         file.name = nowfile.name;
+
+        if( typeof props.data === 'function' ) {
+            this.setPostParams(props.data(nowfile) || {})
+        }
+
         changeStart();
         props.onStart && props.onStart(nowfile);
         // MyCangetData_num++;

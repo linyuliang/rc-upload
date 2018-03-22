@@ -27,7 +27,6 @@ class Upload extends Component {
       PropTypes.func,
     ]),
     headers: PropTypes.object,
-    flash: PropTypes.object,
     accept: PropTypes.string,
     multiple: PropTypes.bool,
     disabled: PropTypes.bool,
@@ -43,7 +42,6 @@ class Upload extends Component {
     prefixCls: 'rc-upload',
     data: {},
     headers: {},
-    flash: {},
     name: 'file',
     multipart: false,
     onReady: empty,
@@ -71,7 +69,7 @@ class Upload extends Component {
   }
 
   getComponent() {
-    return typeof File !== 'undefined' ? AjaxUpload : (FlashUploader ? FlashUploader : IframeUpload);
+    return typeof File !== 'undefined' ? AjaxUpload : (FlashUploader && 'fish' in this.props ? FlashUploader : IframeUpload);
   }
 
   abort(file) {

@@ -69,7 +69,7 @@ class Upload extends Component {
   }
 
   getComponent() {
-    return typeof File !== 'undefined' ? AjaxUpload : (FlashUploader && 'fish' in this.props ? FlashUploader : IframeUpload);
+    return typeof File !== 'undefined' ? AjaxUpload : (FlashUploader && 'flash' in this.props ? FlashUploader : IframeUpload);
   }
 
   abort(file) {

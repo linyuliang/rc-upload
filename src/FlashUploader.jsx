@@ -123,8 +123,13 @@ class FlashUploader extends Component {
     const flashStyle = {
       ...Flash_Other_STYLE,
       //display: this.state.uploading || disabled ? 'none' : '',
-      display: disabled ? 'none' : '',
+      //display: disabled ? 'none' : '',
     };
+    if (disabled) {
+      flashStyle.position = 'absolute';
+      flashStyle.top = '-1000px';
+    }
+
     const cls = classNames({
       [prefixCls]: true,
       [`${prefixCls}-disabled`]: disabled,

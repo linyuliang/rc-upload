@@ -135,7 +135,6 @@ class IframeUploader extends Component {
     <!DOCTYPE html>
     <html>
     <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <style>
     body,html {padding:0;margin:0;border:0;overflow:hidden;}
     </style>

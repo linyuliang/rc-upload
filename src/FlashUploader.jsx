@@ -30,7 +30,10 @@ class FlashUploader extends Component {
     children: PropTypes.any,
     data: PropTypes.object,
     flash: PropTypes.object,
-    action: PropTypes.string,
+    action: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.func,
+    ]),
     name: PropTypes.string,
   }
 

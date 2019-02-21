@@ -83,7 +83,12 @@ class AjaxUploader extends Component {
     this._isMounted = false;
     this.abort();
   }
-
+  componentDidUpdate () {
+    if (this.props.directory) {
+      this.refs.file.directory = true;
+      this.refs.file.webkitdirectory = true;
+    }
+  }
   uploadFiles = files => {
     const postFiles = Array.prototype.slice.call(files);
     const len = postFiles.length;

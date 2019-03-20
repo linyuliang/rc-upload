@@ -131,10 +131,7 @@ class AjaxUploader extends Component {
     }
     const { props } = this;
     let { data } = props;
-    const { onStart, onProgress, accept } = props;
-    if (!attrAccept(file, accept)) {
-      return;
-    }
+    const { onStart, onProgress } = props;
     if (typeof data === 'function') {
       data = data(file);
     }

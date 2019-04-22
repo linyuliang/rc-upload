@@ -27,7 +27,8 @@
     "port": 8020
   },
   "scripts": {
-    "build": "rc-tools run build",
+    "build": "rc-tools run compile",
+    "dist": "rc-tools run build",
     "gh-pages": "rc-tools run gh-pages",
     "start": "node server",
     "compile": "rc-tools run compile --babel-runtime",

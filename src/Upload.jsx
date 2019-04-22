@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AjaxUpload from './AjaxUploader';
 import IframeUpload from './IframeUploader';
-let FlashUploader = null
-if(window.SWFUpload){
-  FlashUploader = require('./FlashUploader');
-}
 
 function empty() {
 }
@@ -39,6 +35,7 @@ class Upload extends Component {
     onReady: PropTypes.func,
     withCredentials: PropTypes.bool,
     supportServerRender: PropTypes.bool,
+    openFileDialogOnClick: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -57,6 +54,7 @@ class Upload extends Component {
     beforeUpload: null,
     customRequest: null,
     withCredentials: false,
+    openFileDialogOnClick: true,
   }
 
   state = {
@@ -73,23 +71,27 @@ class Upload extends Component {
   }
 
   getComponent() {
-    return typeof File !== 'undefined' ? AjaxUpload : (FlashUploader && 'flash' in this.props ? FlashUploader : IframeUpload);
+    return typeof File !== 'undefined' ? AjaxUpload : IframeUpload;
   }
 
   abort(file) {
-    this.refs.inner.abort(file);
+    this.uploader.abort(file);
+  }
+
+  saveUploader = (node) => {
+    this.uploader = node;
   }
 
   render() {
     if (this.props.supportServerRender) {
       const ComponentUploader = this.state.Component;
       if (ComponentUploader) {
-        return <ComponentUploader {...this.props} ref="inner"/>;
+        return <ComponentUploader {...this.props} ref={this.saveUploader} />;
       }
       return null;
     }
     const ComponentUploader = this.getComponent();
-    return <ComponentUploader {...this.props} directory={this.props.directory} ref="inner"/>;
+    return <ComponentUploader {...this.props} ref={this.saveUploader} />;
   }
 }
 

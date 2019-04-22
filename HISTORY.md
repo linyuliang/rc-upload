@@ -14,6 +14,10 @@
 - Support `action={(file) => Promise}`. [#97](https://github.com/react-component/upload/pull/97)
 - Fix a bluebird promise warning. [#110](https://github.com/react-component/upload/pull/110)
 
+### 2.4.14 / 2019-03-20
+
+- 特定环境下chrome32位的zip文件类型是application/x-zip-compressed,业务方写application/zip的时候无法识别zip类型. [rc-upload](https://github.com/react-component/upload/commit/e4a5f9b19c57ad4f7ec64ce15e7bc2df2c1f8c80)
+
 ### 2.4.0 / 2017-07-15
 
 - Add XHR for onSuccess callback by @xiangkaiy [!85](https://github.com/react-component/upload/pull/85)

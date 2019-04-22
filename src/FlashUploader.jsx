@@ -179,7 +179,7 @@ class FlashUploader extends Component {
     return (
       <Tag
         className={cls}
-        style={{ position: 'relative', display: 'block', zIndex: 0, ...style }}
+        style={{ position: 'relative', zIndex: 0, ...style }}
       >
         <div ref={this.onloadDom} style={flashStyle}></div>
         {children}

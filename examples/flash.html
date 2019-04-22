@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title>rc-upload-ie</title>
+    <script src="//cdn.polyfill.io/v2/polyfill.min.js"></script>
     <link href="/node_modules\normalize.css/normalize.css" type="text/css" rel="stylesheet"/>
     <script src="/node_modules\es5-shim/es5-shim.js"></script>
     <script src="/node_modules\es5-shim/es5-sham.js"></script>
@@ -14,11 +14,11 @@
     <script src="/node_modules\rc-tools\public/qrcode.js"></script>
     <script src="/node_modules\fastclick/lib/fastclick.js"></script>
     <link rel="stylesheet" type="text/css" href="/node_modules\highlight.js/styles/github.css">
-    
+
     <script>
-    if(!window.Promise) {
-      document.writeln('<script src="/node_modules\es6-promise/dist/es6-promise.js"'+'>'+'<'+'/'+'script>');
-    }
+      if(!window.Promise) {
+        document.writeln('<script src="/node_modules\es6-promise/dist/es6-promise.js"'+'>'+'<'+'/'+'script>');
+      }
     </script>
     <script src="/swfupload/swfobject.js"></script>
     <script src="/swfupload/swfupload.js"></script>
@@ -51,8 +51,8 @@
     </style>
 </head>
 <body>
-  <h1>flash上传</h1>
-  <div id="__react-content"></div>
-<script src="./ie.js"></script>
+<h1>flash上传</h1>
+<div id="__react-content"></div>
+<script src="./flash.js"></script>
 </body>
 </html>

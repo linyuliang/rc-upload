@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AjaxUpload from './AjaxUploader';
 import IframeUpload from './IframeUploader';
+import FlashUploader from './FlashUploader';
 
 function empty() {
 }
@@ -71,7 +72,16 @@ class Upload extends Component {
   }
 
   getComponent() {
-    return typeof File !== 'undefined' ? AjaxUpload : IframeUpload;
+    let FinalUploader = null;
+    if (typeof File !== 'undefined') {
+      FinalUploader = AjaxUpload;
+    } else if (FlashUploader && 'flash' in this.props) {
+      FinalUploader = FlashUploader;
+    } else {
+      FinalUploader = IframeUpload;
+    }
+
+    return FinalUploader;
   }
 
   abort(file) {

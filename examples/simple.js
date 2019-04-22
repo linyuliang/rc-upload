@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Upload from 'rc-upload';
+import Upload from '@sdp.nd/rc-upload';
 
 const style = `
         .rc-upload-disabled {

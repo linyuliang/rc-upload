@@ -176,10 +176,10 @@ export default function getMyOptions(props, obj) {
   //上传成功
   //file object, server data
   MyOptions.upload_success_handler = function () {
-    var _file = arguments[0];
+    // var _file = arguments[0];
     var oRes = eval('(' + arguments[1] + ')');
     if (props.onSuccess) {
-      return props.onSuccess(oRes, _file);
+      return props.onSuccess(oRes, nowFile);
     }
   };
   //上传完成

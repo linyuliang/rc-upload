@@ -6,11 +6,7 @@ export default function getMyOptions(props, obj) {
   let nowFile = {};
   let nowFileList = [];
 
-  let propsData = props.data;
-  if (typeof propsData === 'function') {
-    propsData = propsData();
-  }
-  var MyOptions = {
+  const MyOptions = {
     debug: false,
     //上传文件大小
     // file_size_limit: [0, "1 MB", "5 MB", "10 MB"][props.flash.fileSize || 0],
@@ -33,7 +29,7 @@ export default function getMyOptions(props, obj) {
     // 文件选取窗口中显示的文件类型描述
     file_types_description: props.flash.file_types_description || "",
     //额外参数
-    post_params: propsData || {},
+    post_params: {}, // 不能直接传入，因为需要nowFile参数
     file_post_name: props.name || "file",
     //上传服务端地址
     upload_url: props.action,
@@ -84,7 +80,13 @@ export default function getMyOptions(props, obj) {
         }
         resolve(action);
       }).then(action => {
-        that.setUploadURL(action);
+        let propsData = props.data;
+        if (typeof propsData === 'function') {
+          propsData = propsData(nowFile);
+        }
+
+        that.setUploadURL(action); // 动态设置upload_url
+        that.setPostParams(propsData || {}); // 动态设置post_params
         that.startUpload();
         props.onStart && props.onStart(nowFile);
       })
@@ -117,10 +119,6 @@ export default function getMyOptions(props, obj) {
     file.name = nowFile.name;
 
     nowFileList.push(_file);
-
-    if (typeof props.data === 'function') {
-      this.setPostParams(props.data(nowFile) || {})
-    }
 
     changeStart();
     // 原先如果写在这里的话，那么每次即使beforeUpload取消上传了，依然会触发下，导致preview一闪而过

@@ -64,7 +64,7 @@ export default function getMyOptions(props, obj) {
   };
   //文件选择对话框关闭之后触发
   // number of files selected, number of files queued, number of files Inqueued
-  MyOptions.file_dialog_complete_handler = function () {
+  MyOptions.file_dialog_complete_handler = function (fileNumber) {
     // //正确队列文件数为空
     // if(arguments[2]<1){return false;}
     // //正确队列文件数超过限定数
@@ -92,24 +92,25 @@ export default function getMyOptions(props, obj) {
       })
     }
 
-    changeStart();
-    if (!props.beforeUpload) {
-      return post();
-    }
-    // 处理 beforeUpload 参数是异步的情况
-    const before = props.beforeUpload(nowFile, nowFileList);
-    if (before && before.then) {
-      before.then(() => {
+    if (fileNumber) {
+      changeStart();
+      if (!props.beforeUpload) {
+        return post();
+      }
+      // 处理 beforeUpload 参数是异步的情况
+      const before = props.beforeUpload(nowFile, nowFileList);
+      if (before && before.then) {
+        before.then(() => {
+          post();
+        }, () => {
+          changeEnd();
+        });
+      } else if (before !== false) {
         post();
-      }, () => {
+      } else {
         changeEnd();
-      });
-    } else if (before !== false) {
-      post();
-    } else {
-      changeEnd();
+      }
     }
-
   };
   // 每次选择的文件成功加入上传队列触发
   MyOptions.file_queued_handler = function (_file) {//file object

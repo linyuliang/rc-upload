@@ -37,6 +37,10 @@ class Upload extends Component {
     withCredentials: PropTypes.bool,
     supportServerRender: PropTypes.bool,
     openFileDialogOnClick: PropTypes.bool,
+    flash: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.bool,
+    ]),
   }
 
   static defaultProps = {
@@ -75,7 +79,7 @@ class Upload extends Component {
     let FinalUploader = null;
     if (typeof File !== 'undefined') {
       FinalUploader = AjaxUpload;
-    } else if (FlashUploader && 'flash' in this.props) {
+    } else if (FlashUploader && this.props.flash) {
       FinalUploader = FlashUploader;
     } else {
       FinalUploader = IframeUpload;

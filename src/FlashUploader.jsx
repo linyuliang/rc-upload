@@ -32,7 +32,10 @@ class FlashUploader extends Component {
       PropTypes.object,
       PropTypes.func,
     ]),
-    flash: PropTypes.object,
+    flash: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.bool,
+    ]),
     action: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.func,

@@ -60,6 +60,7 @@ class Upload extends Component {
     customRequest: null,
     withCredentials: false,
     openFileDialogOnClick: true,
+    flash: true,
   }
 
   state = {

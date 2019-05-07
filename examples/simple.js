@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Upload from 'rc-upload';
+import Upload from '@sdp.nd/rc-upload';
 
 const style = `
         .rc-upload-disabled {
@@ -78,9 +78,17 @@ class Test extends React.Component {
             height: 500,
           }}
         >
-          <Upload {...this.uploaderProps} component="div" style={{ display: 'inline-block' }}>
-            <a>开始上传2</a></Upload>
+          <Upload
+            {...this.uploaderProps}
+            id="test"
+            component="div"
+            style={{ display: 'inline-block' }}
+          >
+            <a>开始上传2</a>
+          </Upload>
         </div>
+
+        <label htmlFor="test">Label for Upload</label>
       </div>
 
       <button onClick={this.destroy}>destroy</button>

@@ -1,5 +1,18 @@
 # History
 ----
+### 3.0.0 / 2019-04-22
+
+- ie9下添加flash能力.
+
+### 2.6.0 / 2018-09-21
+
+- Add `openFileDialogOnClick`.
+
+### 2.5.0 / 2018-06-12
+
+- Support upload directory. [#114](https://github.com/react-component/upload/pull/114)
+- Support `action={(file) => Promise}`. [#97](https://github.com/react-component/upload/pull/97)
+- Fix a bluebird promise warning. [#110](https://github.com/react-component/upload/pull/110)
 
 ### 2.4.14 / 2019-03-20
 

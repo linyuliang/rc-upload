@@ -68,10 +68,12 @@ class IframeUploader extends Component {
     const target = this.getFormInputNode();
     // ie8/9 don't support FileList Object
     // http://stackoverflow.com/questions/12830058/ie8-input-type-file-get-files
-    const file = this.file = {
+    const file = (this.file = {
       uid: getUid(),
-      name: target.value,
-    };
+      name:
+        target.value &&
+        target.value.substring(target.value.lastIndexOf('\\') + 1, target.value.length),
+    });
     this.startUpload();
     const { props } = this;
     if (!props.beforeUpload) {
@@ -98,12 +100,10 @@ class IframeUploader extends Component {
 
   componentDidUpdate() {
     this.updateIframeWH();
-    // ie8/9 reset props chenwei
-    this.state.uploading || this.initIframe();
   }
 
   getIframeNode() {
-    return this.refs.iframe;
+    return this.iframe;
   }
 
   getIframeDocument() {
@@ -138,6 +138,7 @@ class IframeUploader extends Component {
     <!DOCTYPE html>
     <html>
     <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <style>
     body,html {padding:0;margin:0;border:0;overflow:hidden;}
     </style>
@@ -265,6 +266,10 @@ class IframeUploader extends Component {
     });
   }
 
+  saveIframe = (node) => {
+    this.iframe = node;
+  }
+
   render() {
     const {
       component: Tag, disabled, className,
@@ -285,7 +290,7 @@ class IframeUploader extends Component {
         style={{ position: 'relative', zIndex: 0, ...style }}
       >
         <iframe
-          ref="iframe"
+          ref={this.saveIframe}
           onLoad={this.onLoad}
           style={iframeStyle}
         />

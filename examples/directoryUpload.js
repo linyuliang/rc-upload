@@ -5,16 +5,21 @@ import ReactDOM from 'react-dom';
 import Upload from '@sdp.nd/rc-upload';
 
 class Test extends React.Component {
-  render() {
-    const props = {
+  constructor(props) {
+    super(props);
+    this.uploaderProps = {
       action: '/upload.do',
-      type: 'drag',
-      accept: '.png',
+      data: { a: 1, b: 2 },
+      headers: {
+        Authorization: 'xxxxxxx',
+      },
+      directory: true,
       beforeUpload(file) {
         console.log('beforeUpload', file.name);
       },
       onStart: (file) => {
         console.log('onStart', file.name);
+        // this.refs.inner.abort(file);
       },
       onSuccess(file) {
         console.log('onSuccess', file);
@@ -25,11 +30,21 @@ class Test extends React.Component {
       onError(err) {
         console.log('onError', err);
       },
-      style: { display: 'inline-block', width: 200, height: 200, background: '#eee' },
-      // openFileDialogOnClick: false
     };
-    return <Upload {...props} />;
+  }
+  render() {
+    return (<div
+      style={{
+        margin: 100,
+      }}
+    >
+
+      <div>
+        <Upload {...this.uploaderProps} ref="inner"><a>开始上传</a></Upload>
+      </div>
+
+    </div>);
   }
 }
 
-ReactDOM.render(<Test />, document.getElementById('__react-content'));
+ReactDOM.render(<Test/>, document.getElementById('__react-content'));

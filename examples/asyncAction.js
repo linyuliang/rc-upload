@@ -1,11 +1,16 @@
 /* eslint no-console:0 */
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Upload from '@sdp.nd/rc-upload';
 
 const props = {
-  action: '/upload.do',
+  action: () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve('/upload.do');
+      }, 2000);
+    });
+  },
   multiple: true,
   onStart(file) {
     console.log('onStart', file, file.name);
@@ -15,16 +20,6 @@ const props = {
   },
   onError(err) {
     console.log('onError', err);
-  },
-  beforeUpload(file, fileList) {
-    console.log(file, fileList);
-    return new Promise((resolve) => {
-      console.log('start check');
-      setTimeout(() => {
-        console.log('check finshed');
-        resolve(file);
-      }, 3000);
-    });
   },
 };
 

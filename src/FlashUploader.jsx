@@ -3,18 +3,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
+import loadJS from '@sdp.nd/js-async-loader';
 import getUid from './uid';
-import getMyoptions from './getMyoptions';
-import warning from 'warning';
+import getMyOptions from './getMyOptions';
 
-const Flash_Other_STYLE = {
+const FLASH_OTHER_STYLE = {
   position: 'absolute',
   top: 0,
   left: 0,
   zIndex: 9999,
 };
 
-const Flash_STYLE = {}
+const FLASH_STYLE = {};
 
 // diferent from AjaxUpload, can only upload on at one time, serial seriously
 class FlashUploader extends Component {
@@ -28,8 +28,14 @@ class FlashUploader extends Component {
     onStart: PropTypes.func,
     multiple: PropTypes.bool,
     children: PropTypes.any,
-    data: PropTypes.object,
-    flash: PropTypes.object,
+    data: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.func,
+    ]),
+    flash: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.bool,
+    ]),
     action: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.func,
@@ -37,7 +43,7 @@ class FlashUploader extends Component {
     name: PropTypes.string,
   }
 
-  state = { uid: getUid() , uploading: false}
+  state = { uid: getUid(), uploading: false }
 
   file = {}
 
@@ -45,40 +51,75 @@ class FlashUploader extends Component {
 
   _dom = {}
 
+  swfLoader = async () => {
+    const { swfobjectUrl, swfuploadUrl } = this.props.flash;
+    await loadJS(swfobjectUrl
+      || `//cdncs.101.com/v0.1/static/fish/script/swfupload/swfobject.min.js`);
+    await loadJS(swfuploadUrl
+      || `//cdncs.101.com/v0.1/static/fish/script/swfupload/swfupload.min.js`, 'SWFUpload');
+    return window.SWFUpload;
+  }
+
   componentDidMount() {
-    this.updateFlashWH();
+    this.swfLoader().then(() => {
+      this.updateFlashWH();
+      this.initFlash();
+    });
   }
 
   componentDidUpdate() {
     this.updateFlashWH();
     // ie8/9 reset props chenwei
-    this.state.uploading || this.initFlash();
+    if (!this.state.uploading) {
+      this.initFlash();
+    }
   }
 
   onloadDom = (_dom) => {
-    if (!_dom){return;}
+    if (!_dom) {
+      return;
+    }
     this._dom = _dom;
-    this.updateFlashWH();
-    this.initFlash();
   }
 
-  initFlash(){
+  initFlash() {
     this.endUpload();
-    let lastFlash = this.Flash;
-    this._dom.innerHTML=`<div id=${this.state.uid}></div>`;
-    this.Flash = new SWFUpload(getMyoptions(this.props, {
+    const lastFlash = this.Flash;
+    this._dom.innerHTML = `<div id=${this.state.uid}></div>`;
+    const SWFUpload = window.SWFUpload;
+
+    const { flash, ...restProps } = this.props;
+    let flashProps = null;
+    if (flash) {
+      const {
+        flash_url = '//cdncs.101.com/v0.1/static/fish/script/swfupload/swfupload.swf', // eslint-disable-line
+        flash9_url = '//cdncs.101.com/v0.1/static/fish/script/swfupload/swfupload_fp9.swf', // eslint-disable-line
+        ...flashRestProps,
+      } = flash;
+      flashProps = {
+        flash_url,
+        flash9_url,
+        ...flashRestProps,
+      };
+    }
+    this.Flash = new SWFUpload(getMyOptions({
+      flash: flashProps,
+      ...restProps,
+    }, {
       id: this.state.uid,
-      style: Flash_STYLE,
+      style: FLASH_STYLE,
       file: this.file,
       changeStart: this.startUpload,
-      changeEnd: this.endUpload
+      changeEnd: this.endUpload,
     }));
-    setTimeout(function(){
-      lastFlash.destroy && lastFlash.destroy();
-    },0)
+    setTimeout(() => {
+      if (lastFlash.destroy) {
+        lastFlash.destroy();
+      }
+    }, 0);
   }
 
-  endUpload = () =>{
+  endUpload = () => {
     if (this.state.uploading) {
       this.file = {};
       // hack avoid batch
@@ -89,7 +130,7 @@ class FlashUploader extends Component {
     }
   }
 
-  startUpload = () =>{
+  startUpload = () => {
     if (!this.state.uploading) {
       this.state.uploading = true;
       this.setState({
@@ -100,8 +141,8 @@ class FlashUploader extends Component {
 
   updateFlashWH() {
     const rootNode = ReactDOM.findDOMNode(this);
-    Flash_STYLE.height = rootNode.offsetHeight;
-    Flash_STYLE.width = rootNode.offsetWidth;
+    FLASH_STYLE.height = rootNode.offsetHeight;
+    FLASH_STYLE.width = rootNode.offsetWidth;
   }
 
   abort(file) {
@@ -124,9 +165,9 @@ class FlashUploader extends Component {
       prefixCls, children, style,
     } = this.props;
     const flashStyle = {
-      ...Flash_Other_STYLE,
-      //display: this.state.uploading || disabled ? 'none' : '',
-      //display: disabled ? 'none' : '',
+      ...FLASH_OTHER_STYLE,
+      // display: this.state.uploading || disabled ? 'none' : '',
+      // display: disabled ? 'none' : '',
     };
     if (disabled) {
       flashStyle.position = 'absolute';
@@ -141,9 +182,9 @@ class FlashUploader extends Component {
     return (
       <Tag
         className={cls}
-        style={{ position: 'relative',display:'block', zIndex: 0, ...style }}
+        style={{ position: 'relative', zIndex: 0, ...style }}
       >
-        <div ref={this.onloadDom}  style={flashStyle}></div>
+        <div ref={this.onloadDom} style={flashStyle}></div>
         {children}
       </Tag>
     );

@@ -1,5 +1,5 @@
 {
-  "name": "rc-upload",
+  "name": "@sdp.nd/rc-upload",
   "version": "3.0.0",
   "description": "upload ui component for react",
   "keywords": [

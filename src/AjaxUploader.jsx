@@ -93,11 +93,15 @@ class AjaxUploader extends Component {
 
   uploadFiles = (files) => {
     const postFiles = Array.prototype.slice.call(files);
-    postFiles.forEach((file) => {
-      file.uid = getUid();
-      this.upload(file, postFiles);
-    });
-  }
+    postFiles
+      .map(file => {
+        file.uid = getUid();
+        return file;
+      })
+      .forEach(file => {
+        this.upload(file, postFiles);
+      });
+  };
 
   upload(file, fileList) {
     const { props } = this;
@@ -183,7 +187,7 @@ class AjaxUploader extends Component {
       }
     } else {
       Object.keys(reqs).forEach((uid) => {
-        if (reqs[uid]) {
+        if (reqs[uid] && reqs[uid].abort) {
           reqs[uid].abort();
         }
 
@@ -208,7 +212,7 @@ class AjaxUploader extends Component {
     });
     const events = disabled ? {} : {
       onClick: openFileDialogOnClick ? this.onClick : () => { },
-      onKeyDown: this.onKeyDown,
+      onKeyDown: openFileDialogOnClick ? this.onKeyDown : () => { },
       onDrop: this.onFileDrop,
       onDragOver: this.onFileDrop,
       tabIndex: '0',

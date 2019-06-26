@@ -1,6 +1,6 @@
 {
   "name": "@sdp.nd/rc-upload",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "upload ui component for react",
   "keywords": [
     "react",
@@ -48,7 +48,7 @@
     "rc-tools": "6.x",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "sinon": "2.0.0-pre.2"
+    "sinon": "7.3.2"
   },
   "pre-commit": [
     "lint"

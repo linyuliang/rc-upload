@@ -87,6 +87,10 @@ class FlashUploader extends Component {
     const lastFlash = this.Flash;
     this._dom.innerHTML = `<div id=${this.state.uid}></div>`;
     const SWFUpload = window.SWFUpload;
+    // 脚本还没有拉取到的情况下，这时候触发didUpdate的初始化flash导致报错问题
+    if (!SWFUpload) {
+      return;
+    }
 
     const { flash, ...restProps } = this.props;
     let flashProps = null;

@@ -54,9 +54,9 @@ class FlashUploader extends Component {
   swfLoader = async () => {
     const { swfobjectUrl, swfuploadUrl } = this.props.flash;
     await loadJS(swfobjectUrl
-      || `//cdncs.101.com/v0.1/static/fish/script/swfupload/swfobject.min.js`);
+      || `//gcdncs.101.com/v0.1/static/fish/script/swfupload/swfobject.min.js`);
     await loadJS(swfuploadUrl
-      || `//cdncs.101.com/v0.1/static/fish/script/swfupload/swfupload.min.js`, 'SWFUpload');
+      || `//gcdncs.101.com/v0.1/static/fish/script/swfupload/swfupload.min.js`, 'SWFUpload');
     return window.SWFUpload;
   }
 
@@ -96,8 +96,8 @@ class FlashUploader extends Component {
     let flashProps = null;
     if (flash) {
       const {
-        flash_url = '//cdncs.101.com/v0.1/static/fish/script/swfupload/swfupload.swf', // eslint-disable-line
-        flash9_url = '//cdncs.101.com/v0.1/static/fish/script/swfupload/swfupload_fp9.swf', // eslint-disable-line
+        flash_url = '//gcdncs.101.com/v0.1/static/fish/script/swfupload/swfupload.swf', // eslint-disable-line
+        flash9_url = '//gcdncs.101.com/v0.1/static/fish/script/swfupload/swfupload_fp9.swf', // eslint-disable-line
         ...flashRestProps,
       } = flash;
       flashProps = {

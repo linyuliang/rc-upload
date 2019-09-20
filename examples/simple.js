@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Upload from '@sdp.nd/rc-upload';
+import Upload from '@gem-mine/rc-upload';
 
 const style = `
         .rc-upload-disabled {

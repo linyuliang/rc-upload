@@ -1,7 +1,7 @@
 /* eslint no-console:0 */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Upload from '@sdp.nd/rc-upload';
+import Upload from '@gem-mine/rc-upload';
 
 const props = {
   action: () => {

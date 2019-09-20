@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import loadJS from '@sdp.nd/js-async-loader';
+import loadJS from '@gem-mine/js-async-loader';
 import getUid from './uid';
 import getMyOptions from './getMyOptions';
 

@@ -35,6 +35,7 @@ class AjaxUploader extends Component {
     onProgress: PropTypes.func,
     withCredentials: PropTypes.bool,
     openFileDialogOnClick: PropTypes.bool,
+    transformFile: PropTypes.func,
   }
 
   state = { uid: getUid() }
@@ -62,6 +63,8 @@ class AjaxUploader extends Component {
   }
 
   onFileDrop = e => {
+    const { multiple } = this.props;
+
     e.preventDefault();
 
     if (e.type === 'dragover') {
@@ -75,9 +78,14 @@ class AjaxUploader extends Component {
         _file => attrAccept(_file, this.props.accept)
       );
     } else {
-      const files = Array.prototype.slice.call(e.dataTransfer.files).filter(
-        file => attrAccept(file, this.props.accept)
-      );
+      let files = Array.prototype.slice
+        .call(e.dataTransfer.files)
+        .filter(file => attrAccept(file, this.props.accept));
+
+      if (multiple === false) {
+        files = files.slice(0, 1);
+      }
+
       this.uploadFiles(files);
     }
   }
@@ -132,10 +140,12 @@ class AjaxUploader extends Component {
     }
     const { props } = this;
     let { data } = props;
-    const { onStart, onProgress } = props;
-    if (typeof data === 'function') {
-      data = data(file);
-    }
+    const {
+      onStart,
+      onProgress,
+      transformFile = (originFile) => originFile,
+    } = props;
+
     new Promise(resolve => {
       const { action } = props;
       if (typeof action === 'function') {
@@ -145,26 +155,38 @@ class AjaxUploader extends Component {
     }).then(action => {
       const { uid } = file;
       const request = props.customRequest || defaultRequest;
-      this.reqs[uid] = request({
-        action,
-        filename: props.name,
-        file,
-        data,
-        headers: props.headers,
-        withCredentials: props.withCredentials,
-        onProgress: onProgress ? e => {
-          onProgress(e, file);
-        } : null,
-        onSuccess: (ret, xhr) => {
-          delete this.reqs[uid];
-          props.onSuccess(ret, file, xhr);
-        },
-        onError: (err, ret) => {
-          delete this.reqs[uid];
-          props.onError(err, ret, file);
-        },
+      const transform = Promise.resolve(transformFile(file)).catch(e => {
+        console.error(e); // eslint-disable-line no-console
       });
-      onStart(file);
+
+      transform.then((transformedFile) => {
+        if (typeof data === 'function') {
+          data = data(file);
+        }
+
+        const requestOption = {
+          action,
+          filename: props.name,
+          data,
+          file: transformedFile,
+          headers: props.headers,
+          withCredentials: props.withCredentials,
+          method: props.method || 'post',
+          onProgress: onProgress ? e => {
+            onProgress(e, file);
+          } : null,
+          onSuccess: (ret, xhr) => {
+            delete this.reqs[uid];
+            props.onSuccess(ret, file, xhr);
+          },
+          onError: (err, ret) => {
+            delete this.reqs[uid];
+            props.onError(err, ret, file);
+          },
+        };
+        this.reqs[uid] = request(requestOption);
+        onStart(file);
+      });
     });
   }
 
@@ -181,16 +203,15 @@ class AjaxUploader extends Component {
       if (file && file.uid) {
         uid = file.uid;
       }
-      if (reqs[uid]) {
+      if (reqs[uid] && reqs[uid].abort) {
         reqs[uid].abort();
-        delete reqs[uid];
       }
+      delete reqs[uid];
     } else {
       Object.keys(reqs).forEach((uid) => {
         if (reqs[uid] && reqs[uid].abort) {
           reqs[uid].abort();
         }
-
         delete reqs[uid];
       });
     }
@@ -228,6 +249,7 @@ class AjaxUploader extends Component {
           id={id}
           type="file"
           ref={this.saveFileInput}
+          onClick={e => e.stopPropagation()} // https://github.com/ant-design/ant-design/issues/19948
           key={this.state.uid}
           style={{ display: 'none' }}
           accept={accept}

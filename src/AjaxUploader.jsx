@@ -29,7 +29,10 @@ class AjaxUploader extends Component {
       PropTypes.string,
       PropTypes.func,
     ]),
-    headers: PropTypes.object,
+    headers: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.func,
+    ]),
     beforeUpload: PropTypes.func,
     customRequest: PropTypes.func,
     onProgress: PropTypes.func,
@@ -139,7 +142,7 @@ class AjaxUploader extends Component {
       return;
     }
     const { props } = this;
-    let { data } = props;
+    let { data,headers } = props;
     const {
       onStart,
       onProgress,
@@ -163,13 +166,16 @@ class AjaxUploader extends Component {
         if (typeof data === 'function') {
           data = data(file);
         }
+        if (typeof headers === 'function') {
+          headers = headers(file);
+        }
 
         const requestOption = {
           action,
           filename: props.name,
           data,
           file: transformedFile,
-          headers: props.headers,
+          headers,
           withCredentials: props.withCredentials,
           method: props.method || 'post',
           onProgress: onProgress ? e => {
